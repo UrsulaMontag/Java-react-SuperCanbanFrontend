@@ -6,6 +6,7 @@ import TodoGallery from "./routes/TodoGallery.tsx";
 import {useEffect, useState} from "react";
 import {Todo} from "./models/Todo.ts";
 import axios from "axios";
+import TodoDetailCard from "./routes/TodoDetailCard.tsx";
 
 function App() {
     const [data, setData] = useState<Todo[]>([]);
@@ -43,6 +44,9 @@ function App() {
                 }, {
                     path: '/board/done',
                     element: <TodoGallery todos={data} status="DONE"/>
+                }, {
+                    path: '/details/:id',
+                    element: <TodoDetailCard todos={data}/>
                 },
 
             ]
