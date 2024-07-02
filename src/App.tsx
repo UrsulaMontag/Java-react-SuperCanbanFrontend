@@ -3,10 +3,27 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import MainLayout from "./layouts/MainLayout.tsx";
 import Home from "./routes/Home.tsx";
 import TodoGallery from "./routes/TodoGallery.tsx";
-import DoingGallery from "./routes/DoingGallery.tsx";
-import DoneGallery from "./routes/DoneGallery.tsx";
+import {useEffect, useState} from "react";
+import {Todo} from "./models/Todo.ts";
+import axios from "axios";
 
 function App() {
+    const [data, setData] = useState<Todo[]>([]);
+
+    const fetchTodos = () => {
+        axios.get<Todo[]>("/api/todo")
+            .then(response => {
+                setData(response.data)
+                console.log(response.data)
+            })
+            .catch(error => console.error('Error fetching todos', error))
+    }
+
+
+    useEffect(() => {
+        fetchTodos()
+    }, []);
+
 
     const router = createBrowserRouter([
         {
@@ -19,13 +36,13 @@ function App() {
                 },
                 {
                     path: '/board/todo',
-                    element: <TodoGallery/>
+                    element: <TodoGallery todos={data} status="OPEN"/>
                 }, {
                     path: '/board/doing',
-                    element: <DoingGallery/>
+                    element: <TodoGallery todos={data} status="IN_PROGRESS"/>
                 }, {
                     path: '/board/done',
-                    element: <DoneGallery/>
+                    element: <TodoGallery todos={data} status="DONE"/>
                 },
 
             ]
