@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import {Todo} from "./models/Todo.ts";
 import axios from "axios";
 import TodoDetailCard from "./routes/TodoDetailCard.tsx";
+import EditTodo from "./routes/EditTodo.tsx";
 
 function App() {
     const [data, setData] = useState<Todo[]>([]);
@@ -15,9 +16,14 @@ function App() {
         axios.get<Todo[]>("/api/todo")
             .then(response => {
                 setData(response.data)
-                console.log(response.data)
             })
             .catch(error => console.error('Error fetching todos', error))
+    };
+    const editTodo = (todo: Todo) => {
+        axios.put<Todo>("/api/todo/" + todo.id, {...todo})
+            .then(response => {
+                setData([...data, response.data]);
+            })
     }
 
 
@@ -47,6 +53,9 @@ function App() {
                 }, {
                     path: '/details/:id',
                     element: <TodoDetailCard todos={data}/>
+                }, {
+                    path: '/edit/:id',
+                    element: <EditTodo editTodo={editTodo} todos={data}/>
                 },
 
             ]

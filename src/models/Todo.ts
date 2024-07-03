@@ -1,6 +1,8 @@
 export type Todo = {
     id: string;
     description: string;
-    status: "OPEN" | "IN_PROGRESS" | "DONE";
+    status: Status;
 }
+
+export type Status = "OPEN" | "IN_PROGRESS" | "Done" | string;
 
