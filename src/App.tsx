@@ -24,6 +24,8 @@ function App() {
             .then(response => {
                 setData([...data, response.data]);
             })
+            .then(fetchTodos)
+            .catch(error => console.error('Error update todo', error))
     }
 
 
